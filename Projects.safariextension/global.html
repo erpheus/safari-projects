@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Projects</title>
+		<script type="text/javascript">
+			function performCommand(event) {
+				if (event.command == "newProject") {
+					alert("hello!");
+				}
+			}
+			function validateCommand(event) {
+				if (event.command === "newProject") {
+					event.target.disabled = false;
+				}	
+			}
+			function activateHandler(event) {
+				event.target.page.dispatchMessage("reload", true);
+				event.target.removeEventListener("activate", activateHandler, true);
+			}
+			function msgReceive(event) {
+			    if (event.name === "canLoad") {
+			        if (event.target != safari.application.activeBrowserWindow.activeTab) {
+			            event.message = "pause";
+			            event.target.addEventListener("activate", activateHandler, true);
+			        } else {
+			            event.message = "allow";
+			        }
+			    }
+			}
+
+			safari.application.addEventListener("message", msgReceive, true);
+			safari.application.addEventListener('command', performCommand, true);
+			safari.application.addEventListener('validate', validateCommand, true);
+		</script>
+	</head>
+	<body>
+	</body>
+</html>
